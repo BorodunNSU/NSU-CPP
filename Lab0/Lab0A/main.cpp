@@ -4,7 +4,7 @@
 #include <iostream>
 
 int main(int argc, char **argv) {
-    std::cout << "Hello worlds!" << "\n";
+    std::cout << "Hello world!" << "\n";
 
     std::cout << Module1::getMyName() << "\n";
     std::cout << Module2::getMyName() << "\n";
