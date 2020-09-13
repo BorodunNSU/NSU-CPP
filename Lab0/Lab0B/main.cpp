@@ -9,6 +9,6 @@ int  main(int argc, char* argv[]){
         wordStatistic.writeCSV(argv[argc - 1]);
     }
     else {
-        std::cerr << "Write at least two arguments (e.g. '../input.txt ../output.csv' )" << std::endl;
+        std::cout << "Write at least two arguments (e.g. '../input.txt ../output.csv' )" << std::endl;
     }
 }
