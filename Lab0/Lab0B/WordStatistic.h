@@ -12,9 +12,6 @@ using std::string;
 
 class WordStatistic {
     map<string, int> wordMap;
-    multimap<int, string> sortedWordMap;
-
-    void sortMap();
 
     int wordCounter = 0;
 

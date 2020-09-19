@@ -26,6 +26,9 @@ string GetNextWord(istream &in) {
 
 void WordStatistic::addFile(const string &fileName) {
     ifstream input(fileName);
+    if (!input) {
+        cout << "Can not open input file";
+    }
     string word;
     while (!(word = GetNextWord(input)).empty()) {
         ++wordMap[word];
@@ -34,16 +37,16 @@ void WordStatistic::addFile(const string &fileName) {
 }
 
 
-void WordStatistic::sortMap() {
-    for (auto &word : wordMap) {
-        sortedWordMap.insert(pair<int, string>(word.second, word.first));
-    }
-}
-
 void WordStatistic::writeCSV(const std::string &fileName) {
-    WordStatistic::sortMap();
+    multimap<int, string> sortedWordMap;
+    for (auto word = wordMap.rbegin(); word != wordMap.rend(); ++word) {
+        sortedWordMap.insert(pair<int, string>(word->second, word->first));
+    }
     wordMap.clear();
     ofstream output(fileName);
+    if (!output) {
+        cout << "Can not open output file";
+    }
     for (auto element = sortedWordMap.rbegin(); element != sortedWordMap.rend(); ++element) {
         output << element->second << ',' << element->first << ',' << element->first / (double) wordCounter * 100 << '%'
                << endl;
