@@ -1,0 +1,45 @@
+#comment
+# comment
+
+PUSH 7 #comment on line
+PUSH 13 # comment on line
++
+PRINT
+POP
+
+PUSH 24
+PUSH 4
+-
+PRINT
+POP
+
+PUSH 4
+PUSH 5
+*
+PRINT
+POP
+
+PUSH 2
+PUSH 50
+PUSH 5
+/
+*
+PRINT
+POP
+
+DEFINE a 400
+PUSH a
+SQRT
+PRINT
+POP
+
++
+-
+*
+/
+SQRT
+PUSH
+POP
+DEFINE
+PRINT
+UNKNOWN_OPERATION
