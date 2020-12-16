@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 3.15)
+project(tron CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+
+set(SFML_DIR "SFML-2.5.1/lib/cmake/SFML")
+find_package(SFML 2.5.1 COMPONENTS system window graphics network audio)
+
+MATH(EXPR stack_size "16 * 1024 * 1024") # 16 Mb
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,--stack,${stack_size}") # Increase stack size
+
+#[[add_compile_options(
+        -c
+        -Wall
+        -Wextra
+        -Winit-self
+        -Woverloaded-virtual
+        -Wuninitialized
+        -g)]]
+
+set(SRC_TRON
+        src/main.cpp
+        src/wall.cpp src/wall.h
+        src/drawer.cpp src/drawer.h
+        src/game.cpp src/game.h
+        src/menu.cpp src/menu.h
+        src/player.cpp src/player.h
+        src/settings.cpp src/settings.h src/global_parameters.h src/backGround.cpp src/backGround.h src/obstacleMap.cpp src/obstacleMap.h)
+
+
+add_executable(test src/test.cpp)
+add_executable(tron ${SRC_TRON})
+
+target_link_libraries(test sfml-graphics sfml-window sfml-system)
+target_link_libraries (tron sfml-graphics sfml-window sfml-system)
