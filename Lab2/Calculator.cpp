@@ -22,14 +22,14 @@ void Calculator::calculate(std::istream &stream) {
             if (argument[0] == '#') {
                 break;
             }
-            args.push_front(argument);
+            args.push_back(argument);
         }
         try {
-            std::unique_ptr<Operation> operation = OperationFactory::getFactory().getOperation(command);
+            std::unique_ptr<Operation> operation = Factory::getFactory().getOperation(command);
             operation->run(args, context);
         }
-        catch (std::exception &exc) {
-            std::cout << "Exception: " << exc.what() << std::endl;
+        catch (CalculatorException &exception) {
+            std::cout << "Exception: " << exception.what() << std::endl;
         }
     }
 }

@@ -8,8 +8,8 @@ class Context {
     std::stack<double> stack;
     std::map<std::string, double> variables;
 public:
-    std::map<std::string, double> getVariables() {
-        return variables;
+    double getVariable(const std::string &variable) {
+        return variables.at(variable);
     }
 
     double top() {
@@ -26,6 +26,10 @@ public:
         stack.push(num);
     }
 
+    bool stackIsEmpty() {
+        return stack.empty();
+    }
+
     int stackSize() {
         return stack.size();
     }
@@ -34,8 +38,7 @@ public:
         variables[key] = num;
     }
 
-    bool findVariable(const std::string &key) {
+    bool variableExists(const std::string &key) {
         return variables.find(key) != variables.end();
     }
-
 };

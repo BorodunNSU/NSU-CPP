@@ -1,11 +1,15 @@
 #include "../Operation.h"
 #include "../OperationMaker.h"
+#include "../Exceptions.h"
 
 class Pop : public Operation {
 public:
     void run( std::list<std::string> &args, Context &context) override{
-        if (context.stackSize() == 0) {
-            throw std::runtime_error("POP: Stack is empty");
+        if (!args.empty()) {
+            throw badArgsException("Too much arguments for 'POP'");
+        }
+        if (context.stackIsEmpty()) {
+            throw emptyStackException("POP: Stack is empty");
         }
         context.pop();
     }

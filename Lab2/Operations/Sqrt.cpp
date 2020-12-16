@@ -1,12 +1,16 @@
 #include <cmath>
 #include "../Operation.h"
 #include "../OperationMaker.h"
+#include "../Exceptions.h"
 
 class Sqrt : public Operation {
 public:
     void run(std::list<std::string> &args, Context &context) override {
-        if (context.stackSize() == 0) {
-            throw std::runtime_error("No operand for sqrt");
+        if (context.stackIsEmpty()) {
+            throw badArgsException("No operand for 'SQRT'");
+        }
+        if (!args.empty()){
+            throw badArgsException("Too much arguments for 'SQRT'");
         }
         context.push(sqrt(context.pop()));
     }
