@@ -1,5 +1,6 @@
 #include "menu.h"
-#include "global_parameters.h"
+#include "globalParameters.h"
+#include "controller.h"
 
 using namespace sf;
 
@@ -22,7 +23,7 @@ void Menu::Enter(RenderWindow &window) {
     if (!inSettings) {
         if (selectedLink == 4) {
             drawer.alpha = 0;
-            Game::launchGame();
+            Controller::launchGame();
         }
         if (selectedLink == 5) {
             inSettings = true;
@@ -34,14 +35,15 @@ void Menu::Enter(RenderWindow &window) {
         }
     }
     if (inSettings) {
+        int doSmth = 1;
         if (selectedLink == 4) {
-            Settings::changeSpeed(0.25);
+            doSmth = 2;
         }
         if (selectedLink == 5) {
-            Settings::changeSpeed(-0.25);
+            doSmth = 2;
         }
         if (selectedLink == 6) {
-            Settings::changeSpeed(3.5);
+            doSmth = 2;
         }
         if (selectedLink == 7) {
             inSettings = false;
@@ -108,19 +110,19 @@ void Menu::startScreen(RenderWindow &window) {
         }
 
         drawer.text[1].setFont(drawer.font);
-        drawer.text[1].setString("Player speed +0.25");
+        drawer.text[1].setString("Nothing");
         drawer.text[1].setCharacterSize(yCord / 8);
         drawer.text[1].setFillColor(textColor);
         drawer.text[1].setPosition(xBias, yBias * 4);
 
         drawer.text[2].setFont(drawer.font);
-        drawer.text[2].setString("Player speed -0.25");
+        drawer.text[2].setString("Nothing");
         drawer.text[2].setCharacterSize(yCord / 8);
         drawer.text[2].setFillColor(textColor);
         drawer.text[2].setPosition(xBias, yBias * 5);
 
         drawer.text[3].setFont(drawer.font);
-        drawer.text[3].setString("Players speed reset");
+        drawer.text[3].setString("Nothing");
         drawer.text[3].setCharacterSize(yCord / 8);
         drawer.text[3].setFillColor(textColor);
         drawer.text[3].setPosition(xBias, yBias * 6);

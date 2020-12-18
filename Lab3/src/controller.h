@@ -7,14 +7,16 @@
 #include "player.h"
 #include "wall.h"
 #include "backGround.h"
-
-using namespace sf;
-
+#include "view.h"
+#include "globalParameters.h"
 
 static bool launchedGame = false;
 
-class Game {
+class Controller {
 private:
+    int windowWidth = width;
+    int windowHeight = height;
+    int extraHeight = additionalHeight;
     bool pause = false;
     bool crashed = false;
     bool restart = false;
@@ -23,11 +25,26 @@ private:
     Font font;
     Wall gameWall;
     int randParam = 40;
+    Menu menu;
+    GameView view;
+    sf::RenderWindow gameWindow;
     std::map<int, Player> players;
     std::map<int, VertexArray> playerWalls;
-    std::map<int, Text> texts;
+    std::map<int, Text> scores;
 public:
+    void play();
+
+    void makeWindow();
+
+    RenderWindow * getWindow();
+
+    void makeMenu();
+
     static void launchGame();
+
+    Controller();
+
+    ~Controller() = default;
 
     static bool isLaunched();
 
@@ -43,3 +60,5 @@ public:
 
     void startGame(RenderWindow &window);
 };
+
+

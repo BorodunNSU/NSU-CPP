@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "global_parameters.h"
+#include "globalParameters.h"
 
 class Wall {
 private:

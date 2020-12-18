@@ -1,13 +1,18 @@
-#include "game.h"
+#include "controller.h"
 
 using namespace sf;
 
-void Game::launchGame() {
+void Controller::launchGame() {
     launchedGame = true;
     launchedGame = true;
 }
 
-bool Game::isLaunched() {
+Controller::Controller() {
+    launchedGame = true;
+    launchedGame = true;
+}
+
+bool Controller::isLaunched() {
     if (launchedGame) {
         return true;
     } else {
@@ -15,7 +20,7 @@ bool Game::isLaunched() {
     }
 }
 
-void Game::makePlayers(const bool *bots) {
+void Controller::makePlayers(const bool *bots) {
     std::vector<Color> colors = {Color(0x54e346ff), //green
                                  Color(0x3e64ffff), //blue
                                  Color(0xff006cff), //bright purple
@@ -42,14 +47,14 @@ void Game::makePlayers(const bool *bots) {
     }
 }
 
-void Game::makeWalls() {
+void Controller::makeWalls() {
     for (int i = 0; i < playerCount; ++i) {
         VertexArray playerWall(LineStrip);
         playerWalls.insert({i, playerWall});
     }
 }
 
-void Game::makeTexts() {
+void Controller::makeTexts() {
     if (!font.loadFromFile("../CT ProLamina.ttf")) {
         std::cerr << "No font" << std::endl;
     }
@@ -65,11 +70,13 @@ void Game::makeTexts() {
         text.setOrigin(textBox1.left + textBox1.width / 2, textBox1.top + textBox1.height / 2);
         text.setPosition(int(width / (partCount * partDivider) + width * i / partCount),
                          int(height + additionalHeight / 2));
-        texts.insert({i, text});
+        scores.insert({i, text});
     }
 }
 
-void Game::startGame(RenderWindow &window) {
+void Controller::startGame(RenderWindow &window) {
+    view.setPlayerCount(playerCount);
+
     bool bots[playerCount];
     int score[playerCount];
     for (int i = 0; i < playerCount; ++i) {
@@ -77,6 +84,8 @@ void Game::startGame(RenderWindow &window) {
         bots[i] = true;
     }
     bots[0] = false;
+
+    view.setPlayerScores(score);
 
     makePlayers(bots);
     makeTexts();
@@ -92,11 +101,6 @@ void Game::startGame(RenderWindow &window) {
     VertexArray sBackground = map.getMap();
 
     makePerimeter();
-
-    Menu menu;
-    menu.setBackgroundImage("../menu background.jpg");
-    menu.setSettingsImage("../menu background.jpg");
-    menu.setFont("../Glitch inside.otf");
 
     while (isLaunched()) {
         Event event;
@@ -154,7 +158,7 @@ void Game::startGame(RenderWindow &window) {
                     --playersAlive;
                 }
 
-                drawTrace(&playerWalls.at(i), Vertex(prevPos, player->getColor()),
+                view.drawTrace(&playerWalls.at(i), Vertex(prevPos, player->getColor()),
                           Vertex(presentPos, player->getColor()), player->getTrailThickness());
 
                 gameWall.setPlayerTrace(prevPrevPos.x, prevPrevPos.y,
@@ -196,19 +200,15 @@ void Game::startGame(RenderWindow &window) {
             }
         }
 
-        for (int i = 0; i < playerCount; ++i) {
-            window.draw(playerWalls.at(i));
-        }
-        for (int i = 0; i < playerCount; ++i) {
-            texts.at(i).setString(std::to_string(score[i]));
-            window.draw(texts.at(i));
-        }
+        view.drawPlayerWalls(&playerWalls, &gameWindow);
+        view.drawScores(&scores, &gameWindow);
+
         window.display();
     }
 }
 
 
-void Game::makePerimeter() {
+void Controller::makePerimeter() {
     for (int j = 0; j <= 5; j++) {
         gameWall.setLineWall(j, 0, j, height - 1, 1, 1);
         gameWall.setLineWall(width - (j + 1), 0, width - (j + 1), height - 1, 1, 1);
@@ -217,32 +217,35 @@ void Game::makePerimeter() {
     }
 }
 
-void Game::drawTrace(VertexArray *trace, Vertex prevPos, Vertex presentPos, int thickness) {
-    float prevX = prevPos.position.x;
-    float prevY = prevPos.position.y;
-    float presentX = presentPos.position.x;
-    float presentY = presentPos.position.y;
-    Color color = presentPos.color;
-    trace->append(prevPos);
-    for (int i = 1; i < thickness / 2; ++i) {
-        trace->append(Vertex(Vector2f(prevX, prevY + i), color));
-        trace->append(Vertex(Vector2f(prevX - i, prevY), color));
-        trace->append(Vertex(Vector2f(prevX, prevY - i), color));
-        trace->append(Vertex(Vector2f(prevX + i, prevY), color));
-        trace->append(Vertex(Vector2f(prevX, prevY + i), color));
+
+void Controller::makeWindow() {
+    gameWindow.create(VideoMode(windowWidth, windowHeight + extraHeight), "Tron", Style::Default);
+    //window.setSize(Vector2u(1280, 720));
+
+    Image icon;
+    if (!icon.loadFromFile("../tronIcon.png")) {
+        std::cerr<<"No icon"<<std::endl;
     }
-    if (prevX == presentX) {
-        for (int j = 0; j < thickness; ++j) {
-            trace->append(Vertex(Vector2f(prevX - thickness / 2 + j, prevY), color));
-            trace->append(Vertex(Vector2f(prevX - thickness / 2 + j, presentY), color));
-        }
-    } else if (prevY == presentY) {
-        for (int j = 0; j < thickness; ++j) {
-            trace->append(Vertex(Vector2f(prevX, prevY - thickness / 2 + j), color));
-            trace->append(Vertex(Vector2f(presentX, prevY - thickness / 2 + j), color));
-        }
-    }
+    gameWindow.setIcon(512,512,icon.getPixelsPtr());
+    gameWindow.setVerticalSyncEnabled(true);
+    gameWindow.setKeyRepeatEnabled(false);
 }
+
+void Controller::makeMenu() {
+    menu.setBackgroundImage("../menu background.jpg");
+    menu.setSettingsImage("../menu background.jpg");
+    menu.setFont("../Glitch inside.otf");
+}
+
+sf::RenderWindow *Controller::getWindow() {
+    return &gameWindow;
+}
+
+void Controller::play() {
+
+}
+
+
 
 
 

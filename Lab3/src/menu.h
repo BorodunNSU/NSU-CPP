@@ -2,10 +2,8 @@
 
 #include <SFML\Graphics.hpp>
 #include <SFML\Window.hpp>
-#include "game.h"
-#include "drawer.h"
-#include "settings.h"
-#include "global_parameters.h"
+#include "view.h"
+#include "globalParameters.h"
 
 using namespace sf;
 
@@ -16,7 +14,7 @@ private:
     int yCord = height;
     int selectedLink = 4;
     bool inSettings = false;
-    Drawer drawer;
+    GameView drawer;
 
 public:
     void MoveUp();

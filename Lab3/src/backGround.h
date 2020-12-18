@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <bitset>
 #include <iostream>
-#include "global_parameters.h"
+#include "globalParameters.h"
 
 enum cellType {
     empty = 0,

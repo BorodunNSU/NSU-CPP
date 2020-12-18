@@ -3,8 +3,7 @@
 #include <SFML\Graphics.hpp>
 #include <bitset>
 #include <cmath>
-#include "settings.h"
-#include "global_parameters.h"
+#include "globalParameters.h"
 #include "wall.h"
 
 using namespace sf;
@@ -32,6 +31,7 @@ private:
     bool pAlive = true;
     int pTrailThickness = 5;
     char pNum;
+    float pSpeed = 3;
 
 public:
     void stupidBot(Wall gameWall);

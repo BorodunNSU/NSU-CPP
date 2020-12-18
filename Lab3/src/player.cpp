@@ -60,16 +60,16 @@ void Player::move() {
     Vector2f pos = pPosition;
     switch (pDirection) {
         case up:
-            pPosition.y -= Settings::getSpeed();
+            pPosition.y -= pSpeed;
             break;
         case down:
-            pPosition.y += Settings::getSpeed();
+            pPosition.y += pSpeed;
             break;
         case right:
-            pPosition.x += Settings::getSpeed();
+            pPosition.x += pSpeed;
             break;
         case left:
-            pPosition.x -= Settings::getSpeed();
+            pPosition.x -= pSpeed;
             break;
         default:
             break;
