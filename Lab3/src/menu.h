@@ -2,10 +2,14 @@
 
 #include <SFML\Graphics.hpp>
 #include <SFML\Window.hpp>
-#include "view.h"
 #include "globalParameters.h"
 
 using namespace sf;
+
+enum windowType {
+    menu = 0,
+    settings = 1
+};
 
 class Menu {
 private:
@@ -13,21 +17,23 @@ private:
     int xCord = width;
     int yCord = height;
     int selectedLink = 4;
-    bool inSettings = false;
-    GameView drawer;
-
+    int alpha;
 public:
+    windowType type;
+    Font *menuFont;
+    Text text[5];
+    ConvexShape rectangle;
+    Texture menuBackground;
+    Texture settingsBackground;
+    Sprite menuSprite;
+    Sprite settingsSprite;
+
     void MoveUp();
 
     void MoveDown();
 
-    void Enter(RenderWindow &window);
+    bool Enter();
 
-    void startScreen(RenderWindow &window);
+    void startScreen();
 
-    void setBackgroundImage(const std::string &textureName);
-
-    void setSettingsImage(const std::string &textureName);
-
-    void setFont(const std::string &fontName);
 };

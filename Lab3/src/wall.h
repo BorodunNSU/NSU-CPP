@@ -15,6 +15,8 @@ public:
 
     void setPlayerTrace(int x1, int y1, int x2, int y2, int thickness, char playerNum);
 
+    void makePerimeter();
+
     void setDotWall(int x, int y, char wallType);
 
     void wallReset();

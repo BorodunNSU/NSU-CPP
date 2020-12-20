@@ -2,33 +2,32 @@
 
 #include <SFML\Graphics.hpp>
 #include <SFML\Window.hpp>
+#include "menu.h"
+#include "observer.h"
 
-enum windowType {
-    menu = 0,
-    settings = 1
-};
+using namespace sf;
 
 class GameView {
 private:
-    int playerCount;
-    int *scores;
+    int playerCount{};
+    int *scores{};
 public:
     void setPlayerScores(int *scoresPtr);
+
     void setPlayerCount(int pCount);
-    void drawPlayerWalls(std::map<int, sf::VertexArray> *pWalls, sf::RenderWindow *window);
-    void drawScores(std::map<int, sf::Text> *pScores, sf::RenderWindow *window);
-    void drawTrace(sf::VertexArray *trace, sf::Vertex prevPos, sf::Vertex presentPos, int thickness);
 
-    sf::Font font;
-    sf::Text text[5];
-    sf::ConvexShape rectangle;
-    sf::Texture menuBackground;
-    sf::Texture settingsBackground;
-    sf::Sprite menuSprite;
-    sf::Sprite settingsSprite;
+    void drawPlayerWalls(std::map<int, VertexArray> &pWalls, RenderWindow &window) const;
 
-    float alpha = 255;
+    void drawScores(std::map<int, Text> &pScores, RenderWindow &window);
 
-    virtual void draw(sf::RenderWindow &window, windowType type);
+    virtual void drawMenu(Menu &menu, RenderWindow &window);
+
+    void drawFrame(std::map<int, VertexArray> &pWalls, std::map<int, Text> &pScores, RenderWindow &window);
+
+    static void clearFrame(VertexArray &backgroundImage, RenderWindow &window);
+
+    GameView() = default;
+
+    ~GameView() = default;
 };
 

@@ -21,58 +21,55 @@ enum playerType {
 };
 
 class Player {
-private:
+public:
     Vector2f pPosition;
     Vector2f prevPos;
     Vector2f prevPrevPos;
-    directions pDirection;
+    directions pDirection{};
     Color pColor;
-    playerType pType;
+    playerType pType{};
     bool pAlive = true;
     int pTrailThickness = 5;
-    char pNum;
-    float pSpeed = 3;
+    int pNum{};
+    int pSpeed = 2;
 
-public:
-    void stupidBot(Wall gameWall);
+    Player() = default;
 
-    void cleverBot(Wall gameWall);
+    ~Player() = default;
 
     Player(float startX, float startY, directions startDirection, Color Color, playerType type, char num);
 
-    int getTrailThickness();
+    [[nodiscard]] int getTrailThickness() const;
 
-    bool isAlive();
+    [[nodiscard]] bool isAlive() const;
 
     void died();
 
     void revive();
 
-    bool getType();
+    [[nodiscard]] bool getType() const;
 
-    Vector2f getPosition();
+    [[nodiscard]] Vector2f getPosition() const;
 
     void setPosition(int x, int y);
 
     void changeDirection(int a);
 
-    void aiDirection(Wall gameWall);
+    [[nodiscard]] int getDirection() const;
 
-    int getDirection();
+    [[nodiscard]] Color getColor() const;
 
-    Color getColor();
-
-    bool isCrashed(int x1, int y1, int x2, int y2, Wall gameWall);
+    [[nodiscard]] bool isCrashed(int x1, int y1, int x2, int y2, Wall &gameWall) const;
 
     void move();
 
-    void printPos();
+    void printPos() const;
 
-    int getPlayerNum();
+    [[nodiscard]] int getPlayerNum() const;
 
-    Vector2f getPrevPrevPos();
+    [[nodiscard]] Vector2f getPrevPrevPos() const;
 
-    Vector2f getPrevPos();
+    [[nodiscard]] Vector2f getPrevPos() const;
 
     void changePrevPrevPos(Vector2f prevPos);
 };

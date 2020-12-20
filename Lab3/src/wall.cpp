@@ -88,3 +88,12 @@ void Wall::printWall() {
 char Wall::checkPos(int x, int y) {
     return walls[y][x];
 }
+
+void Wall::makePerimeter() {
+    for (int j = 0; j <= 5; j++) {
+        setLineWall(j, 0, j, height - 1, 1, 1);
+        setLineWall(width - (j + 1), 0, width - (j + 1), height - 1, 1, 1);
+        setLineWall(0, j, width - 1, j, 1, 1);
+        setLineWall(0, height - (j + 1), width - 1, height - (j + 1), 1, 1);
+    }
+}

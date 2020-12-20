@@ -21,7 +21,7 @@ void BackGround::setLineWall(int x1, int y1, int x2, int y2, int thickness, cell
 }
 
 void BackGround::printMap() {
-    for (int y = 0; y < yCord; ++y) {
+    for (int y = 0; y < yCord + extraHeight; ++y) {
         std::cout << y << " : ";
         for (int x = 0; x < xCord; ++x) {
             std::cout << cellMap[y][x] << " ";

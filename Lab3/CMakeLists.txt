@@ -25,7 +25,7 @@ set(SRC_TRON
         src/player.cpp src/player.h
         src/globalParameters.h src/backGround.cpp
         src/backGround.h snake/obstacleMap.cpp
-        snake/obstacleMap.h src/controller.cpp src/controller.h src/view.cpp src/view.h)
+        snake/obstacleMap.h src/controller.cpp src/controller.h src/view.cpp src/view.h src/gameModel.cpp src/gameModel.h src/observer.h src/bot.cpp src/bot.h src/human.cpp src/human.h)
 
 
 add_executable(tron ${SRC_TRON})
