@@ -8,7 +8,7 @@ int main() {
     for (int i = 0; i < playerCount; ++i) {
         types[i] = bot;
     }
-    //types[0] = human;
+    types[0] = human;
 
     Controller controller(playerCount, types);
 

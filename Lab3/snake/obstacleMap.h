@@ -1,6 +1,6 @@
 #pragma once
 
-#include "global_parameters.h"
+#include "../src/globalParameters.h"
 
 class BigSquareObstacle {
 private:
