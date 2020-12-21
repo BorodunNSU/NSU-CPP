@@ -14,8 +14,6 @@ private:
     int windowHeight = height;
     int extraHeight = additionalHeight;
     GameModel model;
-    GameView *view{};
-    Menu *menu{};
 public:
     void startGame();
 
@@ -27,7 +25,11 @@ public:
 
     void setSettingsImage(const std::string &texturePath);
 
-    void makeGame();
+    void processEvent(Event &event);
+
+    void makeWindow();
+
+    void play();
 
     Controller(int playerCount, playerType *types);
 

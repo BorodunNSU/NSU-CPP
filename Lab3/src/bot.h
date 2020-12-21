@@ -8,7 +8,7 @@ public:
 
     ~Bot() = default;
 
-    Bot(float startX, float startY, directions startDirection, Color Color, char num);
+    Bot(float startX, float startY, directions startDirection, Color Color, int num);
 
     void stupidBot(Wall &gameWall);
 

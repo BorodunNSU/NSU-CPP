@@ -19,11 +19,11 @@ void Menu::MoveDown() {
     }
 }
 
-bool Menu::Enter() {
+int Menu::Enter() {
     if (type == menu) {
         if (selectedLink == 4) {
             alpha = 0;
-            GameModel::launchGame();
+            return 2;
         }
         if (selectedLink == 5) {
             type = settings;
@@ -31,7 +31,7 @@ bool Menu::Enter() {
             startScreen();
         }
         if (selectedLink == 6) {
-            return true;
+            return 1;
         }
     } else if (type == settings) {
         int doSmth = 1;
@@ -50,7 +50,7 @@ bool Menu::Enter() {
             startScreen();
         }
     }
-    return false;
+    return 0;
 }
 
 void Menu::startScreen() {

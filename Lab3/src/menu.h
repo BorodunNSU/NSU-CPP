@@ -32,7 +32,7 @@ public:
 
     void MoveDown();
 
-    bool Enter();
+    int Enter();
 
     void startScreen();
 

@@ -4,7 +4,7 @@ void GameModel::launchGame() {
     launchedGame = true;
 }
 
-bool GameModel::isLaunched() {
+bool GameModel::isLaunched() const {
     return launchedGame;
 }
 
@@ -61,21 +61,6 @@ void GameModel::makeTexts() {
         text.setPosition(int(width / (partCount * partDivider) + width * i / partCount),
                          int(height + additionalHeight / 2));
         scores.insert({i, text});
-    }
-}
-
-void GameModel::processEvent(Event &event) {
-    if (event.type == Event::Closed)
-        gameWindow.close();
-    if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
-        launchedGame = false;
-        menu.startScreen();
-    }
-    if (event.type == Event::KeyPressed && event.key.code == Keyboard::P) {
-        pause = !pause;
-    }
-    if (event.type == Event::KeyPressed && event.key.code == Keyboard::R) {
-        restart = true;
     }
 }
 
@@ -184,50 +169,6 @@ void GameModel::endRound() {
     restart = false;
 }
 
-void GameModel::play() {
-    score = new int[playerCount];
-    for (int i = 0; i < playerCount; ++i) {
-        score[i] = 0;
-    }
-    view.setPlayerCount(playerCount);
-    view.setPlayerScores(score);
-
-    makePlayers();
-    makeTexts();
-    makeWalls();
-
-    BackGround map;
-    map.createGridMap(30, 30);
-    map.makeScoreSpace();
-    map.makePerimeter(2);
-    map.makeImageFromMap(Color(0x00587aff), Color(0x1b1b2fff),
-                         Color(0x1d1919ff), Color(0xe43a19ff));
-
-    VertexArray sBackground = map.getMap();
-    gameWall.makePerimeter();
-    while (isLaunched()) {
-        Event event{};
-        while (gameWindow.pollEvent(event)) {
-            processEvent(event);
-        }
-        if (!pause) {
-            GameView::clearFrame(sBackground, gameWindow);
-            for (int i = 0; i < playerCount; ++i) {
-                if (types[i] == bot) {
-                    Bot *bot = &bots.at(i);
-                    botPlay(bot, i);
-                } else {
-                    Human *human = &humans.at(i);
-                    humanPlay(human, i);
-                }
-                if (playersAlive < 2 || restart) {
-                    endRound();
-                }
-            }
-        }
-        view.drawFrame(playerWalls, scores, gameWindow);
-    }
-}
 
 void GameModel::drawTrace(VertexArray &trace, const Vertex &prevPos, const Vertex &presentPos, const int &thickness) {
     float prevX = prevPos.position.x;

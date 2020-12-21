@@ -11,24 +11,19 @@
 #include "view.h"
 #include "globalParameters.h"
 
-static bool launchedGame = false;
-
 class GameModel {
 private:
+public:
+    bool launchedGame = false;
     bool pause = false;
     bool restart = false;
-    int randParam = 40;
-    int *score{};
-    Wall gameWall;
-    std::map<int, Human> humans;
-    std::map<int, Bot> bots;
-    std::map<int, VertexArray> playerWalls;
-    std::map<int, Text> scores;
-public:
     int playerCount{};
     int playersAlive{};
     int humanCount{};
     int botCount{};
+    int *score{};
+    int randParam = 40;
+    Wall gameWall;
     playerType *types{};
     Font scoreFont;
     Font menuFont;
@@ -36,9 +31,14 @@ public:
     Menu menu;
     RenderWindow gameWindow;
 
-    static void launchGame();
+    std::map<int, Human> humans;
+    std::map<int, Bot> bots;
+    std::map<int, VertexArray> playerWalls;
+    std::map<int, Text> scores;
 
-    static bool isLaunched();
+    void launchGame();
+
+    bool isLaunched() const;
 
     void makePlayers();
 
@@ -53,10 +53,6 @@ public:
     void botPlay(Bot *bot, int i);
 
     void endRound();
-
-    void processEvent(Event &event);
-
-    void play();
 
     GameModel() = default;
 

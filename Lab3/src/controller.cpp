@@ -17,13 +17,11 @@ Controller::Controller(int playerCount, playerType *types) {
     model.humanCount = humanCount;
     model.botCount = botCount;
     model.types = types;
-    makeGame();
+
+    makeWindow();
 }
 
-void Controller::makeGame() {
-    view = &model.view;
-    menu = &model.menu;
-
+void Controller::makeWindow() {
     model.gameWindow.create(VideoMode(windowWidth, windowHeight + extraHeight), "Tron", Style::Default);
     //window.setSize(Vector2u(1280, 720));
 
@@ -38,34 +36,96 @@ void Controller::makeGame() {
 
 void Controller::startGame() {
     while (model.gameWindow.isOpen()) {
-        view->drawMenu(*menu, model.gameWindow);
+        model.view.drawMenu(model.menu, model.gameWindow);
         Event event{};
-        bool closeWindow = false;
+        int action = 0;
         while (model.gameWindow.pollEvent(event)) {
             if (event.type == Event::Closed) {
                 model.gameWindow.close();
             }
             if (event.type == Event::KeyPressed) {
                 if (event.key.code == Keyboard::Up) {
-                    menu->MoveUp();
+                    model.menu.MoveUp();
                 }
                 if (event.key.code == Keyboard::Down) {
-                    menu->MoveDown();
+                    model.menu.MoveDown();
                 }
                 if (event.key.code == Keyboard::Enter) {
-                    closeWindow = menu->Enter();
+                    action = model.menu.Enter();
                 }
             }
         }
-        if (closeWindow) {
+        if (action == 1) {
             model.gameWindow.close();
+        } else if (action == 2){
+            model.launchedGame = true;
         }
-        if (!GameModel::isLaunched()) {
-            menu->startScreen();
+        if (!model.isLaunched()) {
+            model.menu.startScreen();
         }
-        if (GameModel::isLaunched()) {
-            model.play();
+        if (model.isLaunched()) {
+            play();
         }
+    }
+}
+
+void Controller::processEvent(Event &event) {
+    if (event.type == Event::Closed)
+        model.gameWindow.close();
+    if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
+        model.launchedGame = false;
+        model.menu.startScreen();
+    }
+    if (event.type == Event::KeyPressed && event.key.code == Keyboard::P) {
+        model.pause = !model.pause;
+    }
+    if (event.type == Event::KeyPressed && event.key.code == Keyboard::R) {
+        model.restart = true;
+    }
+}
+
+void Controller::play() {
+    model.score = new int[model.playerCount];
+    for (int i = 0; i < model.playerCount; ++i) {
+        model.score[i] = 0;
+    }
+    model.view.setPlayerCount(model.playerCount);
+    model.view.setPlayerScores(model.score);
+
+    model.makePlayers();
+    model.makeTexts();
+    model.makeWalls();
+
+    BackGround map;
+    map.createGridMap(30, 30);
+    map.makeScoreSpace();
+    map.makePerimeter(2);
+    map.makeImageFromMap(Color(0x00587aff), Color(0x1b1b2fff),
+                         Color(0x1d1919ff), Color(0xe43a19ff));
+
+    VertexArray sBackground = map.getMap();
+    model.gameWall.makePerimeter();
+    while (model.isLaunched()) {
+        Event event{};
+        while (model.gameWindow.pollEvent(event)) {
+            processEvent(event);
+        }
+        if (!model.pause) {
+            GameView::clearFrame(sBackground, model.gameWindow);
+            for (int i = 0; i < model.playerCount; ++i) {
+                if (model.types[i] == bot) {
+                    Bot *bot = &model.bots.at(i);
+                    model.botPlay(bot, i);
+                } else {
+                    Human *human = &model.humans.at(i);
+                    model.humanPlay(human, i);
+                }
+                if (model.playersAlive < 2 || model.restart) {
+                    model.endRound();
+                }
+            }
+        }
+        model.view.drawFrame(model.playerWalls, model.scores, model.gameWindow);
     }
 }
 
@@ -74,7 +134,7 @@ void Controller::setScoreFont(const std::string &fontPath) {
         std::cerr << "ScoreFont: No font" << std::endl;
         std::cerr << fontPath << std::endl;
     }
-    menu->menuFont = &model.menuFont;
+    model.menu.menuFont = &model.menuFont;
 }
 
 
@@ -86,25 +146,25 @@ void Controller::setMenuFont(const std::string &fontPath) {
 }
 
 void Controller::setBackgroundImage(const std::string &texturePath) {
-    if (!menu->menuBackground.loadFromFile(texturePath)) {
+    if (!model.menu.menuBackground.loadFromFile(texturePath)) {
         std::cerr << "BackgroundTexture: No texture" << std::endl;
         std::cerr << texturePath << std::endl;
     }
-    float textureWidth = menu->menuBackground.getSize().x;
-    float textureHeight = menu->menuBackground.getSize().y;
-    menu->menuSprite.setTexture(menu->menuBackground);
-    menu->menuSprite.setScale(float(windowWidth) / textureWidth, float(windowHeight + extraHeight) / textureHeight);
+    float textureWidth = model.menu.menuBackground.getSize().x;
+    float textureHeight = model.menu.menuBackground.getSize().y;
+    model.menu.menuSprite.setTexture(model.menu.menuBackground);
+    model.menu.menuSprite.setScale(float(windowWidth) / textureWidth, float(windowHeight + extraHeight) / textureHeight);
 }
 
 void Controller::setSettingsImage(const std::string &texturePath) {
-    if (!menu->settingsBackground.loadFromFile(texturePath)) {
+    if (!model.menu.settingsBackground.loadFromFile(texturePath)) {
         std::cerr << "SettingsTexture: No texture" << std::endl;
         std::cerr << texturePath << std::endl;
     }
-    float textureWidth = menu->settingsBackground.getSize().x;
-    float textureHeight = menu->settingsBackground.getSize().y;
-    menu->settingsSprite.setTexture(menu->settingsBackground);
-    menu->settingsSprite.setScale(float(windowWidth) / textureWidth, float(windowHeight + extraHeight) / textureHeight);
+    float textureWidth = model.menu.settingsBackground.getSize().x;
+    float textureHeight = model.menu.settingsBackground.getSize().y;
+    model.menu.settingsSprite.setTexture(model.menu.settingsBackground);
+    model.menu.settingsSprite.setScale(float(windowWidth) / textureWidth, float(windowHeight + extraHeight) / textureHeight);
 }
 
 

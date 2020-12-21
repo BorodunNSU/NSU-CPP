@@ -8,6 +8,6 @@ public:
 
     ~Human() = default;
 
-    Human(float startX, float startY, directions startDirection, Color Color, char num);
+    Human(float startX, float startY, directions startDirection, Color Color, int num);
 };
 
