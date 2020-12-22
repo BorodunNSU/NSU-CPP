@@ -120,19 +120,19 @@ public:
 
     /// \class const_iterator
     /// \brief constant iterator
-    class const_iterator  {
+    class const_iterator {
         node *currentNode;
     public:
         /// \see \a iterator constructor
-        explicit const_iterator (node *node) : currentNode(node) {};
+        explicit const_iterator(node *node) : currentNode(node) {};
 
         /// \see \a iterator copy constructor
-        const_iterator (const_iterator  const &other) {
+        const_iterator(const_iterator const &other) {
             currentNode = other.currentNode;
         }
 
         /// \see \a iterator copy assigment operator
-        const_iterator  &operator=(const const_iterator  &other) {
+        const_iterator &operator=(const const_iterator &other) {
             if (this == other) {
                 return *this;
             }
@@ -141,12 +141,12 @@ public:
         }
 
         /// \see \a iterator comparison
-        bool operator!=(const const_iterator  &other) const {
+        bool operator!=(const const_iterator &other) const {
             return currentNode != other.currentNode;
         }
 
         /// \see \a iterator comparison
-        bool operator==(const const_iterator  &other) const {
+        bool operator==(const const_iterator &other) const {
             return currentNode == other.currentNode;
         }
 
@@ -161,29 +161,29 @@ public:
         }
 
         /// \see \a iterator prefix increment
-        const_iterator  &operator++() {
+        const_iterator &operator++() {
             currentNode = currentNode->next;
             return *this;
         }
 
         /// \see \a iterator postfix increment
-        const_iterator  operator++(int) {
-            const_iterator  old = *this;
+        const_iterator operator++(int) {
+            const_iterator previousNode = *this;
             ++(*this);
-            return old;
+            return previousNode;
         }
 
         /// \see \a iterator prefix decrement
-        const_iterator  &operator--() {
+        const_iterator &operator--() {
             currentNode = currentNode->previous;
             return *this;
         }
 
         /// \see \a iterator postfix decrement
-        const_iterator  operator--(int) {
-            const_iterator  old = *this;
+        const_iterator operator--(int) {
+            const_iterator previousNode = *this;
             --(*this);
-            return old;
+            return previousNode;
         }
     };
 
@@ -271,13 +271,13 @@ public:
     }
 
     /// \returns \a constant \a iterator to the first element of the \a list
-    const_iterator  begin() const {
-        return const_iterator (listEnd->next);
+    const_iterator begin() const {
+        return const_iterator(listEnd->next);
     }
 
     /// \returns \a constant \a iterator to the first element of the \a list
-    const_iterator  cbegin() const {
-        return const_iterator (listEnd->next);
+    const_iterator cbegin() const {
+        return const_iterator(listEnd->next);
     }
 
     /// \returns \a iterator to the last element of the \a list
@@ -286,13 +286,13 @@ public:
     }
 
     /// \returns \a constant \a iterator to the last element of the \a list
-    const_iterator  end() const {
-        return const_iterator (listEnd);
+    const_iterator end() const {
+        return const_iterator(listEnd);
     }
 
     /// \returns \a constant \a iterator to the last element of the \a list
-    const_iterator  cend() const {
-        return const_iterator (listEnd);
+    const_iterator cend() const {
+        return const_iterator(listEnd);
     }
 
     /// \brief Returns size of List
