@@ -466,10 +466,10 @@ public:
 /// \returns United \a list
 template<class T>
 List<T> operator+(const List<T> &left, const List<T> &right) {
-    List<T> jointList;
-    jointList += left;
-    jointList += right;
-    return jointList;
+    List<T> unitedList;
+    unitedList += left;
+    unitedList += right;
+    return unitedList;
 }
 
 /// \brief Lists comparison

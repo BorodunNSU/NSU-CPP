@@ -60,8 +60,9 @@ TEST_F(ListFixture, removeTest){
     list.push_front(100);
     list.push_back(100);
     EXPECT_EQ(listToString(list), "100 100 200 300 400 100");
-    list.remove(100);
+    int count = list.remove(100);
     EXPECT_EQ(listToString(list), "200 300 400");
+    EXPECT_EQ(count, 3);
 }
 
 TEST_F(ListFixture, eraseTest) {
