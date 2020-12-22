@@ -2,12 +2,6 @@
 
 #include "listException.h"
 
-#include <cstddef>
-#include <cstdlib>
-#include <iostream>
-#include <ostream>
-#include <memory>
-
 template<class T>
 class List {
 private:
@@ -22,7 +16,7 @@ private:
                 data(data), previous(previous), next(next) {}
     };
 
-    node *tail;
+    node *listEnd;
     size_t listSize;
 public:
     /// \class \a iterator
@@ -30,21 +24,21 @@ public:
     class iterator {
         friend class List<T>;
 
-        node *currPtr;
+        node *currentNode;
     public:
 
         /// \brief  Constructor
         ///
         /// Makes \a iterator from \a node pointer
-        /// \param[in] current
-        explicit iterator(node *current) : currPtr(current) {};
+        /// \param[in] node
+        explicit iterator(node *node) : currentNode(node) {};
 
         /// \brief Copy constructor
         ///
         /// Copies iterator
         /// \param other An \a iterator to copy from
         iterator(const iterator &other) {
-            currPtr = other.currPtr;
+            currentNode = other.currentNode;
         }
 
         /// \brief Copy assigment operator
@@ -55,7 +49,7 @@ public:
             if ((*this) == other) {
                 return *this;
             }
-            currPtr = other.currPtr;
+            currentNode = other.currentNode;
             return *this;
         }
 
@@ -64,7 +58,7 @@ public:
         /// \param[in] other An \a iterator to compare with
         /// \returns \b True if iterators are different
         bool operator!=(const iterator &other) const {
-            return currPtr != other.currPtr;
+            return currentNode != other.currentNode;
         }
 
         /// \brief \a iterator comparison
@@ -72,28 +66,28 @@ public:
         /// \param[in] other An \a iterator to compare with
         /// \returns \b True if iterators are similar
         bool operator==(const iterator &other) const {
-            return currPtr == other.currPtr;
+            return currentNode == other.currentNode;
         }
 
         /// \brief Element dereferencing
         ///
         /// \returns \b Data on which an \a iterator points to
         T &operator*() {
-            return currPtr->data;
+            return currentNode->data;
         }
 
         /// \brief Element pointer
         ///
         /// \returns  \a Pointer to a current element
         T *operator->() {
-            return &(currPtr->data);
+            return &(currentNode->data);
         }
 
         /// \brief Prefix increment
         ///
         /// \returns \a iterator to the next element
         iterator &operator++() {
-            currPtr = currPtr->next;
+            currentNode = currentNode->next;
             return *this;
         }
 
@@ -110,7 +104,7 @@ public:
         ///
         /// \returns \a iterator to the previous element
         iterator &operator--() {
-            currPtr = currPtr->previous;
+            currentNode = currentNode->previous;
             return *this;
         }
 
@@ -127,14 +121,14 @@ public:
     /// \class const_iterator
     /// \brief constant iterator
     class const_iterator  {
-        node *currPtr;
+        node *currentNode;
     public:
         /// \see \a iterator constructor
-        explicit const_iterator (node *current) : currPtr(current) {};
+        explicit const_iterator (node *node) : currentNode(node) {};
 
         /// \see \a iterator copy constructor
         const_iterator (const_iterator  const &other) {
-            currPtr = other.currPtr;
+            currentNode = other.currentNode;
         }
 
         /// \see \a iterator copy assigment operator
@@ -142,33 +136,33 @@ public:
             if (this == other) {
                 return *this;
             }
-            currPtr = other.currPtr;
+            currentNode = other.currentNode;
             return *this;
         }
 
         /// \see \a iterator comparison
         bool operator!=(const const_iterator  &other) const {
-            return currPtr != other.currPtr;
+            return currentNode != other.currentNode;
         }
 
         /// \see \a iterator comparison
         bool operator==(const const_iterator  &other) const {
-            return currPtr == other.currPtr;
+            return currentNode == other.currentNode;
         }
 
         /// \see \a iterator element dereferencing
         const T &operator*() {
-            return currPtr->data;
+            return currentNode->data;
         }
 
         /// \see \a iterator element pointer
         const T *operator->() {
-            return &(currPtr->data);
+            return &(currentNode->data);
         }
 
         /// \see \a iterator prefix increment
         const_iterator  &operator++() {
-            currPtr = currPtr->next;
+            currentNode = currentNode->next;
             return *this;
         }
 
@@ -181,7 +175,7 @@ public:
 
         /// \see \a iterator prefix decrement
         const_iterator  &operator--() {
-            currPtr = currPtr->previous;
+            currentNode = currentNode->previous;
             return *this;
         }
 
@@ -196,9 +190,9 @@ public:
     /// \brief Base constructor
     ///
     /// Creates an empty \a list
-    List() : listSize(0), tail(new node()) {
-        tail->next = tail;
-        tail->previous = tail;
+    List() : listSize(0), listEnd(new node()) {
+        listEnd->next = listEnd;
+        listEnd->previous = listEnd;
     }
 
     /// \brief Copy constructor
@@ -218,9 +212,9 @@ public:
     /// \param[in] other
     List(List &&other) noexcept {
         listSize = other.listSize;
-        tail = other.tail;
+        listEnd = other.listEnd;
         other.listSize = 0;
-        other.tail = nullptr;
+        other.listEnd = nullptr;
     }
 
     /// \brief Destructor
@@ -230,7 +224,7 @@ public:
         if (!empty()) {
             clear();
         }
-        delete tail;
+        delete listEnd;
     }
 
     /// \brief Copy assignment
@@ -263,9 +257,9 @@ public:
         if (!empty()) {
             clear();
         }
-        delete tail;
+        delete listEnd;
         listSize = other.listSize;
-        tail = other.head;
+        listEnd = other.head;
         other.listSize = 0;
         other.head = nullptr;
         return *this;
@@ -273,32 +267,32 @@ public:
 
     /// \returns \a iterator to the first element of the \a list
     iterator begin() {
-        return iterator(tail->next);
+        return iterator(listEnd->next);
     }
 
     /// \returns \a constant \a iterator to the first element of the \a list
     const_iterator  begin() const {
-        return const_iterator (tail->next);
+        return const_iterator (listEnd->next);
     }
 
     /// \returns \a constant \a iterator to the first element of the \a list
     const_iterator  cbegin() const {
-        return const_iterator (tail->next);
+        return const_iterator (listEnd->next);
     }
 
     /// \returns \a iterator to the last element of the \a list
     iterator end() {
-        return iterator(tail);
+        return iterator(listEnd);
     }
 
     /// \returns \a constant \a iterator to the last element of the \a list
     const_iterator  end() const {
-        return const_iterator (tail);
+        return const_iterator (listEnd);
     }
 
     /// \returns \a constant \a iterator to the last element of the \a list
     const_iterator  cend() const {
-        return const_iterator (tail);
+        return const_iterator (listEnd);
     }
 
     /// \brief Returns size of List
@@ -358,13 +352,13 @@ public:
             throw ListException("erase: List is empty");
         }
 
-        node *nextNode = position.currPtr->next;
-        node *prevNode = position.currPtr->previous;
+        node *nextNode = position.currentNode->next;
+        node *prevNode = position.currentNode->previous;
         prevNode->next = nextNode;
         nextNode->previous = prevNode;
         iterator next = iterator(nextNode);
-        delete position.currPtr;
-        listSize--;
+        --listSize;
+        delete position.currentNode;
         return next;
     }
 
@@ -442,11 +436,11 @@ public:
     /// \returns \a iterator of the new element
     iterator insert(iterator before, const T &value) {
         node *newNode = new node(value);
-        newNode->previous = before.currPtr->previous;
-        newNode->next = before.currPtr;
-        before.currPtr->previous->next = newNode;
-        before.currPtr->previous = newNode;
-        listSize++;
+        newNode->previous = before.currentNode->previous;
+        newNode->next = before.currentNode;
+        before.currentNode->previous->next = newNode;
+        before.currentNode->previous = newNode;
+        ++listSize;
         return iterator(newNode);
     }
 
