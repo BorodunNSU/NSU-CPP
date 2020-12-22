@@ -48,12 +48,20 @@ TEST_F(ListFixture, throwCheck) {
 
 TEST_F(ListFixture, insertTest) {
     list.insert(++list.begin(), array[0]);
-    EXPECT_EQ(*(++list.begin()), array[0]);
+    EXPECT_EQ(*(++list.cbegin()), array[0]);
 
     list.insert(list.begin(), array[1]);
     EXPECT_EQ(*(list.begin()), array[1]);
 
     EXPECT_EQ(listToString(list), "6 100 5 200 300 400");
+}
+
+TEST_F(ListFixture, removeTest){
+    list.push_front(100);
+    list.push_back(100);
+    EXPECT_EQ(listToString(list), "100 100 200 300 400 100");
+    list.remove(100);
+    EXPECT_EQ(listToString(list), "200 300 400");
 }
 
 TEST_F(ListFixture, eraseTest) {
@@ -72,7 +80,7 @@ TEST_F(ListFixture, eraseInRangeTest) {
     EXPECT_EQ(listToString(left), "100");
 
     right.erase(right.begin(), --right.end());
-    EXPECT_EQ(listToString(right), "400");
+    EXPECT_EQ(listToString(right), std::to_string(right.back()));
 }
 
 TEST_F(ListFixture, clearTest) {

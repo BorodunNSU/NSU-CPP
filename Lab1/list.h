@@ -37,7 +37,7 @@ public:
         ///
         /// Makes \a iterator from \a node pointer
         /// \param[in] current
-        iterator(node *current) : currPtr(current) {};
+        explicit iterator(node *current) : currPtr(current) {};
 
         /// \brief Copy constructor
         ///
@@ -124,21 +124,21 @@ public:
         }
     };
 
-    /// \class constIterator
+    /// \class const_iterator
     /// \brief constant iterator
-    class constIterator {
+    class const_iterator  {
         node *currPtr;
     public:
         /// \see \a iterator constructor
-        explicit constIterator(node *current) : currPtr(current) {};
+        explicit const_iterator (node *current) : currPtr(current) {};
 
         /// \see \a iterator copy constructor
-        constIterator(constIterator const &other) {
+        const_iterator (const_iterator  const &other) {
             currPtr = other.currPtr;
         }
 
         /// \see \a iterator copy assigment operator
-        constIterator &operator=(const constIterator &other) {
+        const_iterator  &operator=(const const_iterator  &other) {
             if (this == other) {
                 return *this;
             }
@@ -147,12 +147,12 @@ public:
         }
 
         /// \see \a iterator comparison
-        bool operator!=(const constIterator &other) const {
+        bool operator!=(const const_iterator  &other) const {
             return currPtr != other.currPtr;
         }
 
         /// \see \a iterator comparison
-        bool operator==(const constIterator &other) const {
+        bool operator==(const const_iterator  &other) const {
             return currPtr == other.currPtr;
         }
 
@@ -167,27 +167,27 @@ public:
         }
 
         /// \see \a iterator prefix increment
-        constIterator &operator++() {
+        const_iterator  &operator++() {
             currPtr = currPtr->next;
             return *this;
         }
 
         /// \see \a iterator postfix increment
-        constIterator operator++(int) {
-            constIterator old = *this;
+        const_iterator  operator++(int) {
+            const_iterator  old = *this;
             ++(*this);
             return old;
         }
 
         /// \see \a iterator prefix decrement
-        constIterator &operator--() {
+        const_iterator  &operator--() {
             currPtr = currPtr->previous;
             return *this;
         }
 
         /// \see \a iterator postfix decrement
-        constIterator operator--(int) {
-            constIterator old = *this;
+        const_iterator  operator--(int) {
+            const_iterator  old = *this;
             --(*this);
             return old;
         }
@@ -206,6 +206,7 @@ public:
     /// Allocates new memory and copy data from other
     /// \param[in] other \a list to copy
     List(const List &other) : List() {
+        listSize = 0;
         for (auto &item : other) {
             push_back(item);
         }
@@ -276,13 +277,13 @@ public:
     }
 
     /// \returns \a constant \a iterator to the first element of the \a list
-    constIterator begin() const {
-        return constIterator(tail->next);
+    const_iterator  begin() const {
+        return const_iterator (tail->next);
     }
 
     /// \returns \a constant \a iterator to the first element of the \a list
-    constIterator cbegin() const {
-        return constIterator(tail->next);
+    const_iterator  cbegin() const {
+        return const_iterator (tail->next);
     }
 
     /// \returns \a iterator to the last element of the \a list
@@ -291,24 +292,24 @@ public:
     }
 
     /// \returns \a constant \a iterator to the last element of the \a list
-    constIterator end() const {
-        return constIterator(tail);
+    const_iterator  end() const {
+        return const_iterator (tail);
     }
 
     /// \returns \a constant \a iterator to the last element of the \a list
-    constIterator cend() const {
-        return constIterator(tail);
+    const_iterator  cend() const {
+        return const_iterator (tail);
     }
 
     /// \brief Returns size of List
     /// \returns \a list size
-    int size() const {
+    [[nodiscard]] int size() const {
         return listSize;
     }
 
     /// \brief Checks if List is empty
     /// \returns \b True if \a list is empty
-    bool empty() const {
+    [[nodiscard]] bool empty() const {
         return listSize == 0;
     }
 
@@ -355,7 +356,7 @@ public:
     iterator erase(iterator position) {
         if (empty() || position == end()) {
             throw ListException("erase: List is empty");
-        };
+        }
 
         node *nextNode = position.currPtr->next;
         node *prevNode = position.currPtr->previous;
@@ -384,12 +385,12 @@ public:
     /// \brief Deletes all elements that store \b value
     ///
     /// \param[in] value
-    /// \return amount of deleted elements
+    /// \returns amount of deleted elements
     int remove(const T &value) {
         int count = 0;
         iterator current = begin();
         while (current != end()) {
-            if (current.iteratorPointer_->data == value) {
+            if (*current == value) {
                 current = erase(current);
                 ++count;
             } else {
@@ -452,7 +453,7 @@ public:
     /// \brief Appends one \a list to another
     ///
     /// \param other A \a list to append
-    /// \return United \a list
+    /// \returns United \a list
     List &operator+=(const List &other) {
         if (other.empty()) {
             return *this;
@@ -468,7 +469,7 @@ public:
 ///
 /// \param left first \a list
 /// \param right first \a list
-/// \return United \a list
+/// \returns United \a list
 template<class T>
 List<T> operator+(const List<T> &left, const List<T> &right) {
     List<T> jointList;
@@ -481,7 +482,7 @@ List<T> operator+(const List<T> &left, const List<T> &right) {
 ///
 /// \param left first \a list
 /// \param right first \a list
-/// \return \b True if \a lists are equal
+/// \returns \b True if \a lists are equal
 template<class T>
 bool operator==(const List<T> &left, const List<T> &right) {
     if (&left == &right) {
@@ -509,7 +510,7 @@ bool operator==(const List<T> &left, const List<T> &right) {
 ///
 /// \param left first \a list
 /// \param right first \a list
-/// \return \b True if \a lists are not equal
+/// \returns \b True if \a lists are not equal
 template<class T>
 bool operator!=(const List<T> &left, const List<T> &right) {
     return !(left == right);
