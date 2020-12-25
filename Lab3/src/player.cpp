@@ -3,7 +3,7 @@
 
 using namespace sf;
 
-Player::Player(float startX, float startY, directions startDirection, Color Color, playerType type, char num) {
+Player::Player(float startX, float startY, directions startDirection, Color Color, playerType type, int num) {
     pPosition.x = startX;
     pPosition.y = startY;
     prevPrevPos.x = startX;
@@ -40,14 +40,14 @@ bool Player::isCrashed(int x1, int y1, int x2, int y2, Wall &gameWall) const {
     if (x1 == x2) {
         for (int i = std::min(y1, y2); i <= std::max(y1, y2); i++) {
             int wallType = gameWall.checkPos(x1, i);
-            if (i > 0 && i < height && wallType != 0 && wallType != pNum) {
+            if (i > 0 && i < height && wallType != -1 && wallType != pNum) {
                 return true;
             }
         }
     } else if (y1 == y2) {
         for (int i = std::min(x1, x2); i <= std::max(x1, x2); i++) {
             int wallType = gameWall.checkPos(i, y1);
-            if (i > 0 && i < width && wallType != 0 && wallType != pNum) {
+            if (i > 0 && i < width && wallType != -1 && wallType != pNum) {
                 return true;
             }
         }
@@ -56,7 +56,7 @@ bool Player::isCrashed(int x1, int y1, int x2, int y2, Wall &gameWall) const {
 }
 
 void Player::move() {
-    Vector2f pos = pPosition;
+    prevPos = pPosition;
     switch (pDirection) {
         case up:
             pPosition.y -= pSpeed;
@@ -73,7 +73,6 @@ void Player::move() {
         default:
             break;
     }
-    prevPos = pos;
 }
 
 bool Player::getType() const {
@@ -114,4 +113,21 @@ void Player::changePrevPrevPos(Vector2f prevPosition) {
 
 Vector2f Player::getPrevPos() const {
     return sf::Vector2f(prevPos);
+}
+
+void Player::play(Wall &gameWall, int *playersAlive) {
+    if (!isAlive()) {
+        return;
+    }
+    decideDirection(gameWall);
+
+    if (isCrashed(prevPos.x, prevPos.y, pPosition.x, pPosition.y, gameWall)) {
+        died();
+        --(*playersAlive);
+    }
+
+    gameWall.setPlayerTrace(prevPrevPos.x, prevPrevPos.y, prevPos.x, prevPos.y, 1, -2); // -2 is global wall
+    gameWall.setPlayerTrace(prevPos.x, prevPos.y, pPosition.x, pPosition.y, 1,char(pNum));
+
+    changePrevPrevPos(prevPos);
 }

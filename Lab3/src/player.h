@@ -21,6 +21,8 @@ enum playerType {
 };
 
 class Player {
+private:
+    bool pAlive = true;
 public:
     Vector2f pPosition;
     Vector2f prevPos;
@@ -28,16 +30,19 @@ public:
     directions pDirection{};
     Color pColor;
     playerType pType{};
-    bool pAlive = true;
-    int pTrailThickness = 5;
     int pNum{};
     int pSpeed = 2;
+    int pTrailThickness = 5;
 
     Player() = default;
 
     ~Player() = default;
 
-    Player(float startX, float startY, directions startDirection, Color Color, playerType type, char num);
+    virtual void decideDirection(Wall &gameWall) = 0;
+
+    void play(Wall &gameWall, int *playersAlive);
+
+    Player(float startX, float startY, directions startDirection, Color Color, playerType type, int num);
 
     [[nodiscard]] int getTrailThickness() const;
 

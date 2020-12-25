@@ -8,13 +8,9 @@ public:
 
     ~Bot() = default;
 
+    void decideDirection(Wall &gameWall) override;
+
     Bot(float startX, float startY, directions startDirection, Color Color, int num);
-
-    void stupidBot(Wall &gameWall);
-
-    void cleverBot(Wall &gameWall);
-
-    void botDirection(Wall &gameWall);
 };
 
 

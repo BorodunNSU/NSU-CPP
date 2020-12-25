@@ -11,12 +11,6 @@ int main() {
     types[0] = human;
 
     Controller controller(playerCount, types);
-
-    controller.setBackgroundImage("../menu_background.jpg");
-    controller.setSettingsImage("../menu_background.jpg");
-    controller.setMenuFont("../Glitch inside.otf");
-    controller.setScoreFont("../CT ProLamina.ttf");
-
     controller.startGame();
 
     return 0;

@@ -11,11 +11,10 @@ Bot::Bot(float startX, float startY, directions startDirection, Color Color, int
     pNum = num;
 }
 
-void Bot::stupidBot(Wall &gameWall) {
+void Bot::decideDirection(Wall &gameWall) {
     int posX = pPosition.x;
     int posY = pPosition.y;
     int chosenDir = pDirection;
-    Wall gWall;
     std::map<directions, int> distances = {{down,  0},
                                            {left,  0},
                                            {up,    0},
@@ -30,10 +29,9 @@ void Bot::stupidBot(Wall &gameWall) {
         }
         for (int j = 0; j < scanWidth; ++j) {
             char wallType = gameWall.checkPos(posX - scanWidth / 2 + j, posY + i);
-            if (wallType != 0 && wallType != pNum) {
+            if (wallType != -1 && wallType != pNum) {
                 distances[down] = i;
             }
-            //gWall.setDotWall(posX - scanWidth / 2 + j, posY + i, 1);
         }
         ++i;
     }
@@ -45,10 +43,9 @@ void Bot::stupidBot(Wall &gameWall) {
         }
         for (int j = 0; j < scanWidth; ++j) {
             char wallType = gameWall.checkPos(posX - i, posY - scanWidth / 2 + j);
-            if (wallType != 0 && wallType != pNum) {
+            if (wallType != -1 && wallType != pNum) {
                 distances[left] = i;
             }
-            //gWall.setDotWall(posX - i, posY - scanWidth / 2 + j, 1);
         }
         ++i;
     }
@@ -60,10 +57,9 @@ void Bot::stupidBot(Wall &gameWall) {
         }
         for (int j = 0; j < scanWidth; ++j) {
             char wallType = gameWall.checkPos(posX - scanWidth / 2 + j, posY - i);
-            if (wallType != 0 && wallType != pNum) {
+            if (wallType != -1 && wallType != pNum) {
                 distances[up] = i;
             }
-            //gWall.setDotWall(posX - scanWidth / 2 + j, posY - i, 1);
         }
         ++i;
     }
@@ -75,20 +71,18 @@ void Bot::stupidBot(Wall &gameWall) {
         }
         for (int j = 0; j < scanWidth; ++j) {
             char wallType = gameWall.checkPos(posX + i, posY - scanWidth / 2 + j);
-            if (wallType != 0 && wallType != pNum) {
+            if (wallType != -1 && wallType != pNum) {
                 distances[right] = i;
             }
-            //gWall.setDotWall(posX + i, posY - scanWidth / 2 + j, 1);
         }
         ++i;
     }
-    //gWall.printWall();
 
     std::vector<directions> dirs = {down, left, up, right};
     dirs.erase(dirs.begin() + pDirection % 2);
     dirs.erase(dirs.begin() + pDirection % 2 + 1);
 
-    auto minEl = std::max_element(distances.begin(), distances.end(),
+    auto minEl = std::min_element(distances.begin(), distances.end(),
                                   [](const std::pair<directions, int> &p1, const std::pair<directions, int> &p2) {
                                       return p1.second > p2.second;
                                   });
@@ -103,12 +97,5 @@ void Bot::stupidBot(Wall &gameWall) {
     }
 
     changeDirection(chosenDir);
-}
-
-void Bot::cleverBot(Wall &gameWall) {
-
-}
-
-void Bot::botDirection(Wall &gameWall) {
-    stupidBot(gameWall);
+    move();
 }

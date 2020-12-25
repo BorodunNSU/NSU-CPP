@@ -53,8 +53,8 @@ void BackGround::createGridMap(int xSpacing, int ySpacing) {
 
 }
 
-sf::VertexArray BackGround::getMap() {
-    return map;
+sf::VertexArray *BackGround::getMap() {
+    return &map;
 }
 
 void BackGround::makeImageFromMap(sf::Color lineColor, sf::Color backgroundColor, sf::Color textBGColor,

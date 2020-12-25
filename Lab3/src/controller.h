@@ -5,38 +5,30 @@
 #include <string>
 #include "menu.h"
 #include "view.h"
-#include "globalParameters.h"
 #include "gameModel.h"
 
 class Controller {
 private:
-    int windowWidth = width;
-    int windowHeight = height;
-    int extraHeight = additionalHeight;
     GameModel model;
+    GameView view;
 public:
     void startGame();
 
-    void setScoreFont(const std::string &fontPath);
-
-    void setMenuFont(const std::string &fontPath);
-
-    void setBackgroundImage(const std::string &texturePath);
-
-    void setSettingsImage(const std::string &texturePath);
-
     void processEvent(Event &event);
 
-    void makeWindow();
+    void makeView();
 
     void play();
 
     Controller(int playerCount, playerType *types);
 
+    void makePlayers();
+
+    void endRound();
+
     Controller() = default;
 
     ~Controller() = default;
-
 };
 
 

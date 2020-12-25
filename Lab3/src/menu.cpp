@@ -54,9 +54,9 @@ int Menu::Enter() {
 }
 
 void Menu::startScreen() {
-    Color textColor(0xc62a88ff);
-    Color tronColor(0x05dfd7ff);
-    int xBias = 50;
+    Color textColor(0xe41749ff);
+    Color tronColor(0x00d1ffff);
+    int xBias = xCord / 14;
     int yBias = yCord / 10;
 
     if (type == menu) {
@@ -65,7 +65,7 @@ void Menu::startScreen() {
         text[0].setString("TRON");
         text[0].setCharacterSize(yCord / 4);
         text[0].setFillColor(Color(5, 223, 215, alpha));
-        text[0].setPosition(xCord / 8, yCord / 16);
+        text[0].setPosition(xCord / 14, yCord / 14);
         if (alpha <= 0) {
             alpha = 255;
         }
@@ -103,7 +103,7 @@ void Menu::startScreen() {
         text[0].setString("SETTINGS");
         text[0].setCharacterSize(yCord / 6);
         text[0].setFillColor(Color(0, 255, 255, alpha));
-        text[0].setPosition(xCord / 8, yCord / 16);
+        text[0].setPosition(xCord / 16, yCord / 14);
         if (alpha <= 0) {
             alpha = 255;
         }

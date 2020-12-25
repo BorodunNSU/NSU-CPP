@@ -34,7 +34,7 @@ public:
 
     void setLineWall(int x1, int y1, int x2, int y2, int thickness, cellType type);
 
-    sf::VertexArray getMap();
+    sf::VertexArray *getMap();
 
 };
 

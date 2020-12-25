@@ -7,7 +7,7 @@ void Wall::setLineWall(int x1, int y1, int x2, int y2, int thickness, char wallT
         for (int y = std::min(y1, y2); y <= std::max(y1, y2); y++) {
             if (y > 0 && y < yCord) {
                 for (int j = 0; j < thickness; ++j) {
-                    walls[y][x1 - thickness / 2 + j] = true;
+                    walls[y][x1 - thickness / 2 + j] = wallType;
                 }
             }
         }
@@ -15,7 +15,7 @@ void Wall::setLineWall(int x1, int y1, int x2, int y2, int thickness, char wallT
         for (int x = std::min(x1, x2); x <= std::max(x1, x2); x++) {
             if (x > 0 && x < xCord) {
                 for (int j = 0; j < thickness; ++j) {
-                    walls[y1 - thickness / 2 + j][x] = true;
+                    walls[y1 - thickness / 2 + j][x] = wallType;
                 }
             }
         }
@@ -51,16 +51,11 @@ void Wall::setDotWall(int x, int y, char wallType) {
 void Wall::wallReset() {
     for (int y = 0; y < yCord; ++y) {
         for (int x = 0; x < xCord; ++x) {
-            walls[y][x] = 0;
+            walls[y][x] = -1;
         }
     }
 
-    for (int j = 0; j <= 5; j++) {
-        setLineWall(j, 0, j, height - 1, 1, 1);
-        setLineWall(width - (j + 1), 0, width - (j + 1), height - 1, 1, 1);
-        setLineWall(0, j, width - 1, j, 1, 1);
-        setLineWall(0, height - (j + 1), width - 1, height - (j + 1), 1, 1);
-    }
+    makePerimeter();
 }
 
 char (*Wall::getWall())[width] {
@@ -91,9 +86,9 @@ char Wall::checkPos(int x, int y) {
 
 void Wall::makePerimeter() {
     for (int j = 0; j <= 5; j++) {
-        setLineWall(j, 0, j, height - 1, 1, 1);
-        setLineWall(width - (j + 1), 0, width - (j + 1), height - 1, 1, 1);
-        setLineWall(0, j, width - 1, j, 1, 1);
-        setLineWall(0, height - (j + 1), width - 1, height - (j + 1), 1, 1);
+        setLineWall(j, 0, j, height - 1, 1, -2);
+        setLineWall(width - (j + 1), 0, width - (j + 1), height - 1, 1, -2);
+        setLineWall(0, j, width - 1, j, 1, -2);
+        setLineWall(0, height - (j + 1), width - 1, height - (j + 1), 1, -2);
     }
 }
